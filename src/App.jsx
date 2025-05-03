@@ -5,7 +5,7 @@ import './App.css'
 function App() {
  const [movies, setMovies] = useState()
 
- const BASEURL = 'http://localhost:8000/api/v1/'
+ const BASEURL = 'https://djangomovieapi.onrender.com/api/v1/'
  const YOUTUBE = 'https://www.youtube.com/embed/'
 
 
