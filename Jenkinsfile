@@ -1,11 +1,5 @@
 pipeline{
     agent any
-    environment{
-        IMAGE_NAME='movie-app:v1'
-        IMAGE_TAG='v1'
-        DOCKER_CREDENTIAL_ID='dockerlogin'
-
-    }
 
     stages{
         stage('checkout code'){
@@ -16,20 +10,28 @@ pipeline{
 
         stage('build docker image'){
             steps{
-                sh 'docker build -t $IMAGE_NAME:IMAGE_TAG .'
+                sh 'docker build -t ekenefranklyn/movie-app:1 .'
             }
         }
 
         stage('Login to docker hub'){
             steps{
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIAL_ID}")])
+                withCredentials([usernamePassword(
+                    credentialsId: 'DOCKER_LOGIN',
+                    usernameVariable: 'USERNAME',
+                    passwordVariable: 'PASSWORD'
+                )]) {
+                    sh 
+                        echo '$PASSWORD | docker login -u $USERNAME --password-stdin'
+                    
+                }
             }
 
         }
 
         stage('push to docker hub'){
             steps{
-                sh 'docker push $IMAGE_NAME:IMAGE_TAG'
+                sh 'docker push ekenefranklyn/movie-app:v1'
             }
         }
     }
