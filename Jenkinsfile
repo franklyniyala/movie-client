@@ -10,7 +10,7 @@ pipeline{
 
         stage('build docker image'){
             steps{
-                sh 'docker build -t ekenefranklyn/movie-app:1 .'
+                sh 'docker build -t ekenefranklyn/movie-app:v1 .'
             }
         }
 
