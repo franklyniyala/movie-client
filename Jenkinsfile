@@ -21,26 +21,25 @@ pipeline{
                     usernameVariable: 'USERNAME',
                     passwordVariable: 'PASSWORD'
                 )]) {
-                    echo '$PASSWORD | docker login -u $USERNAME --password-stdin'
+                    sh
+                        echo '''
+                            $PASSWORD | docker login -u $USERNAME --password-stdin
+                            docker push ekenefranklyn/movie-app:v1
+
+                            '''
                     
                 }
             }
 
         }
-
-        stage('push to docker hub'){
-            steps{
-                sh 'docker push ekenefranklyn/movie-app:v1'
-            }
-        }
     }
 
     post{
         success{
-            echo "React image built and pushed succesfully"
+            echo " ❎ React image built and pushed succesfully"
         }
         failure{
-            echo "Pipeline failed"
+            echo " ❌ Pipeline failed"
         }
     }
 }
