@@ -21,8 +21,7 @@ pipeline{
                     usernameVariable: 'USERNAME',
                     passwordVariable: 'PASSWORD'
                 )]) {
-                    sh 
-                        echo '$PASSWORD | docker login -u $USERNAME --password-stdin'
+                    echo '$PASSWORD | docker login -u $USERNAME --password-stdin'
                     
                 }
             }
