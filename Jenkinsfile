@@ -21,7 +21,6 @@ pipeline{
                     usernameVariable: 'USERNAME',
                     passwordVariable: 'PASSWORD'
                 )]) {
-                    sh
                         echo '''
                             $PASSWORD | docker login -u $USERNAME --password-stdin
                             docker push ekenefranklyn/movie-app:v1
