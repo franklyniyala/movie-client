@@ -4,13 +4,15 @@ pipeline{
     stages{
         stage('checkout code'){
             steps{
-                git branch: 'main', url: 'https://github.com/franklyniyala/movie-client'
+                git branch: 'main',
+                credentialsId: 'GITHUB_CRED',
+                url: 'https://github.com/franklyniyala/movie-client'
             }
         }
 
         stage('build docker image'){
             steps{
-                sh 'docker build -t ekenefranklyn/movie-app:v1 .'
+                sh 'docker build -t ekenefranklyn/movie-client:v1 .'
             }
         }
 
@@ -20,22 +22,36 @@ pipeline{
                     credentialsId: 'DOCKER_LOGIN',
                     usernameVariable: 'USERNAME',
                     passwordVariable: 'PASSWORD'
-                )]) {
-                        echo '''
-                            $PASSWORD | docker login -u $USERNAME --password-stdin
-                            docker push ekenefranklyn/movie-app:v1
-
-                            '''
+                )]){
+                        echo '$PASSWORD | docker login -u $USERNAME --password-stdin'
                     
                 }
             }
+        }
+
+            stage('Push to Docker Hub'){
+                steps{
+                sh
+                    'docker push ekenefranklyn/movie-client:v1'
+            }
 
         }
+
+        stage('Deploy application'){
+            steps{
+                sh '''
+                    docker stop movie-client || true
+                    doker rm movie-client || true
+                    docker run -d -p 2400:80 --name movie-client ekenefranklyn/movie-client:v1
+                '''
+            }
+        }
+                
     }
 
     post{
         success{
-            echo " ❎ React image built and pushed succesfully"
+            echo " ✅ React image built and pushed succesfully"
         }
         failure{
             echo " ❌ Pipeline failed"
