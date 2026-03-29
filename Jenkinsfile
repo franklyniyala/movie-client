@@ -24,16 +24,11 @@ pipeline{
                     passwordVariable: 'PASSWORD'
                 )]){
                         echo '$PASSWORD | docker login -u $USERNAME --password-stdin'
+                        sh 'docker push ekenefranklyn/movie-client:v1'
                     
                 }
             }
         }
-
-            stage('Push to Docker Hub'){
-                steps{
-                    sh 'docker push ekenefranklyn/movie-client:v1'
-                }
-            }
 
         stage('Deploy application'){
             steps{
