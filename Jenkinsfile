@@ -35,8 +35,6 @@ pipeline{
                 }
             }
 
-        }
-
         stage('Deploy application'){
             steps{
                 sh '''
