@@ -32,7 +32,7 @@ pipeline{
             stage('Push to Docker Hub'){
                 steps{
                     
-                    sh 'sudo docker push ekenefranklyn/movie-client:v1'
+                    sh 'docker push ekenefranklyn/movie-client:v1'
                 }
             }
 
