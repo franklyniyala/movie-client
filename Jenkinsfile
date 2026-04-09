@@ -5,8 +5,25 @@ pipeline{
         stage('checkout code'){
             steps{
                 git branch: 'main',
-                credentialsId: 'GITHUB_CRED',
-                url: 'https://github.com/franklyniyala/movie-client'
+                credentialsId: 'GITHUB_LOGIN',
+                url: ''
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: SONAR_TOKEN )]) {
+                    sh '''
+                    docker run --rm \
+                    e SONAR_TOKEN=$SONAR_TOKEN \
+                    -v (pwd):/usr/src \
+                    sonarsource/sonar-scanner-cli \
+                    -Dsonar.projectKey=frank-org_movie-client \
+                    -Dsonar.organization=frank-org \
+                    -Dsonar.source=. \
+                    -Dsonar.host.url=http://sonaecloud.io
+                    '''
+                }
             }
         }
 
@@ -41,7 +58,7 @@ pipeline{
                 sh '''
                     docker stop movie-client || true
                     doker rm movie-client || true
-                    docker run -d -p 2400:80 --name movie-client ekenefranklyn/movie-client:v1
+                    docker run -d -p 5173:5173 --name movie-client ekenefranklyn/movie-client:v1
                 '''
             }
         }
@@ -50,7 +67,9 @@ pipeline{
 
     post{
         success{
-            echo " ✅ React image built and pushed succesfully"
+            echo " ✅ Application image built succesfully"
+            echo " ✅ Application image pushed succesfully"
+            echo " ✅ Application deployed succesfully"
         }
         failure{
             echo " ❌ Pipeline failed"
