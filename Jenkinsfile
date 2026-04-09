@@ -21,7 +21,7 @@ pipeline{
                     -Dsonar.projectKey=frank-org_movie-client \
                     -Dsonar.organization=frank-org \
                     -Dsonar.sources=. \
-                    -Dsonar.host.url=https://sonaecloud.io \
+                    -Dsonar.host.url=http://sonaecloud.io \
                     '''
                 }
             }
