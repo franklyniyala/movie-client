@@ -6,7 +6,7 @@ pipeline{
             steps{
                 git branch: 'main',
                 credentialsId: 'GITHUB_LOGIN',
-                url: ''
+                url: 'https://github.com/franklyniyala/movie-client.git'
             }
         }
 
